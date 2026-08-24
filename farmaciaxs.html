@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmaciaxs</title>
+    <style>
+        /* 1. EL NUEVO COLOR PASTEL PIEL */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fdf3eb; 
+            margin: 0;
+            padding: 0;
+            color: #334155;
+        }
+
+        /* 2. HEADER MÁS ESPACIADO */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f0f8ff; 
+            padding: 15px 30px;
+            box-shadow: none; 
+        }
+
+        .logo { 
+            font-size: 26px; 
+            font-weight: 900; 
+            color: #002878; /* Azul Zafiro Intenso y corporativo */
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 2px rgba(0, 40, 120, 0.1);
+        }
+
+        /* 3. BUSCADOR MINIMALISTA TIPO COMPY */
+        .buscador { 
+            background: #f8fafc; /* Fondo gris súper sutil */
+            border: 1px solid #e2e8f0; /* Borde delicado, no azul fuerte */
+            border-radius: 8px;
+            padding: 10px 20px;
+            flex-grow: 1;
+            margin: 0 40px; 
+            display: flex;
+            box-shadow: none; /* Adiós sombras pesadas */
+            transition: all 0.2s ease;
+        }
+        .buscador:focus-within {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03); /* Sombra suave solo al escribir */
+        }
+        .buscador input { 
+            background: transparent; 
+            border: none; 
+            outline: none; 
+            width: 100%; 
+            font-size: 15px; 
+            color: #334155; 
+        }
+
+        /* 4. LOS BOTONES SUPERIORES (Elegantes y limpios) */
+        .contenedor-botones {
+            display: flex; 
+            gap: 5px; /* Más juntos para un look compacto */
+            align-items: center;
+        }
+
+        .btn-top {
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: transparent; /* Sin fondo por defecto */
+            border: 1px solid transparent; /* SIN bordes de colores */
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600; /* Letra un poco más fina, menos tosca */
+            color: #475569; /* Texto gris oscuro elegante */
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        /* Efecto hover sutil: Solo un fondo gris claro al pasar el mouse */
+        .btn-direccion:hover, .btn-receta:hover, .btn-favoritos:hover { 
+            background: #f1f5f9; 
+            color: #0f172a;
+        }
+
+        /* Botón de Iniciar Sesión (El llamado a la acción principal) */
+        .btn-login { 
+            background: #0f172a; /* Azul noche casi negro, transmite mucha seguridad */
+            color: white; 
+            margin-left: 10px; /* Lo separamos un poquito del resto */
+        }
+        .btn-login:hover { 
+            background: #334155; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+
+        /* MENÚ DE NAVEGACIÓN (Contenedor Principal) */
+        nav {
+            background-color: #f0f8ff; 
+            padding: 10px 30px 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dbeafe;
+            margin-bottom: 30px;
+            overflow: hidden; /* Evita que la página se ensanche */
+        }
+
+        /* 🚀 EL CARRUSEL INFINITO TIPO COMPY */
+        .marquee-container {
+            flex-grow: 1;
+            overflow: hidden;
+            margin-right: 30px;
+            /* Efecto premium: Difumina los bordes para que las letras no se corten de golpe */
+            -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 50px; /* Separación entre cada palabra */
+            align-items: center;
+            width: max-content;
+            /* Aquí definimos el tiempo. 25s es una velocidad suave y elegante */
+            animation: scrollInfinito 25s linear infinite; 
+        }
+
+        /* TRUCO UX: Pausar el movimiento al pasar el mouse */
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollInfinito {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Se mueve exactamente a la mitad para reiniciar el bucle invisible */
+        }
+
+        nav a { 
+            text-decoration: none; 
+            color: #475569; 
+            font-weight: 600; 
+            font-size: 14px;
+            white-space: nowrap;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: #0072ff; }
+
+        main {
+            background-color: transparent; 
+            padding: 0 30px 30px 30px;
+            min-height: 500px;
+        }
+
+        /* TARJETAS CONGRID ESTRICTO */
+        .productos-fijos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 230px);
+            justify-content: start;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .producto-fijo {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            height: 290px; 
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        .producto-fijo:hover {
+            transform: translateY(-5px);
+            border-color: #0072ff;
+            box-shadow: 0 10px 20px rgba(0, 114, 255, 0.1);
+        }
+
+        .precio-producto {
+            font-size: 22px;
+            font-weight: 900;
+            color: #10b981; 
+            margin: 10px 0;
+        }
+
+        .farmacia-tag {
+            font-size: 11px;
+            background-color: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: #64748b;
+            font-weight: 600;
+        }
+        /* ESTILOS DE PAGINACIÓN CLÁSICA */
+        .btn-paginacion {
+            padding: 8px 15px;
+            border: 1px solid #0072ff;
+            background: white;
+            color: #0072ff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .btn-paginacion:hover {
+            background: #e6f0ff;
+            transform: translateY(-2px);
+        }
+        .btn-paginacion.activo {
+            background: #0072ff;
+            color: white;
+            cursor: default;
+            pointer-events: none;
+            box-shadow: 0 4px 6px rgba(0, 114, 255, 0.2);
+        }
+        /* ========================================== */
+        /* ESTILOS DEL FOOTER PREMIUM                 */
+        /* ========================================== */
+        
+        /* 1. Contenedor Principal: Da el fondo blanco y separación superior */
+        .footer-premium {
+            background-color: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 60px; /* Mucho espacio arriba para que "respire" */
+            margin-top: 80px; /* Lo separa de los botones de paginación */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        /* 2. Cuadrícula de 3 columnas (Usa Grid para perfecto alineamiento) */
+        .footer-contenido {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr; /* La primera columna es más ancha */
+            gap: 40px;
+            max-width: 1200px; /* Mantiene el contenido centrado y legible */
+            margin: 0 auto;
+            padding: 0 40px 40px 40px;
+        }
+
+        /* 3. Columna 1: Textos descriptivos */
+        .marca-col .logo-footer {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #0072ff;
+            margin-bottom: 20px;
+        }
+        .footer-texto {
+            color: #64748b; /* Gris texto elegante */
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            max-width: 80%;
+        }
+
+        /* 4. Iconos de Redes Sociales (Estilo circular minimalista) */
+        .redes-sociales {
+            display: flex;
+            gap: 15px;
+        }
+        .icono-red {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            background-color: #f1f5f9;
+            color: #475569;
+            border-radius: 50%; /* Círculos perfectos */
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .icono-red:hover {
+            background-color: #0072ff;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* 5. Columnas de Enlaces */
+        .footer-titulo {
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .enlaces-col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .footer-link {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        .footer-link:hover {
+            color: #0072ff;
+        }
+
+        /* 6. Botón de Afiliación (CTA Suave) */
+        .btn-afilia {
+            margin-top: 15px;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .btn-afilia:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* 7. Línea final (Copyright) */
+        .footer-bottom {
+            border-top: 1px solid #f1f5f9;
+            text-align: center;
+            padding: 20px 0;
+            color: #94a3b8;
+            font-size: 13px;
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- CONTENEDOR DEL LOGO Y EL CANVAS -->
+        <!-- CONTENEDOR DEL LOGO, CANVAS Y SLOGAN -->
+        <div class="logo-container" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+            <canvas id="logo-animal" width="45" height="45"></canvas>
+            <div style="display: flex; flex-direction: column;">
+                <div class="logo" style="line-height: 1;">FARMACIAXS</div>
+                <span style="font-size: 11.5px; color: #64748b; font-weight: 700; letter-spacing: 0.5px; margin-top: 5px;">Compara y ahorra en tu salud</span>
+            </div>
+        </div>
+        
+        <div class="buscador" style="position: relative;">
+            <input type="text" id="input-busqueda" placeholder="Buscar medicamentos, vitaminas o marcas..." autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+            <span id="btn-buscar" style="cursor: pointer; padding-left: 10px; color: #0072ff;">🔍</span>
+            <div id="caja-sugerencias" style="position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #ccc; border-radius: 0 0 10px 10px; display: none; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-height: 150px; overflow-y: auto;">
+            </div>
+        </div>
+        
+        <div class="contenedor-botones">
+            <div class="btn-top btn-direccion" id="btn-direccion"> Ingresar Dirección</div>
+            <div class="btn-top btn-receta" id="btn-receta">🛒 Mis Recetas </div>
+            <div class="btn-top btn-favoritos" id="btn-favoritos">❤️ Mis Favoritos</div>
+            <div class="btn-top btn-login" id="btn-login">👤 Iniciar Sesión</div>
+        </div>
+    </header>
+
+    <!-- 1. Modal de Inicio de Sesión -->
+    <div id="modal-login" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 10px; width: 300px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <h3 style="margin-top: 0; color: #333;">Bienvenido a Farmaciaxs</h3>
+            <p style="font-size: 12px; color: #666; margin-bottom: 20px;">Inicia sesión para guardar tus favoritos y recibir alertas de precios.</p>
+            <input type="email" id="email-input" placeholder="Tu correo electrónico" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+            <input type="password" id="pass-input" placeholder="Contraseña" style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+            <button id="btn-ingresar" style="background: #9b59b6; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 10px; font-weight: bold;">Entrar / Registrarme</button>
+            <button id="btn-cerrar-modal" style="background: #eee; color: #333; border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%;">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- 2. Modal de Mis Favoritos -->
+    <div id="modal-favoritos" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 10px; width: 80%; max-width: 900px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
+            <span id="btn-cerrar-favoritos" style="position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #999;">✖</span>
+            <h2 style="margin-top: 0; color: #e74c3c;">❤️ Mi Botiquín (Productos Guardados)</h2>
+            <div id="contenedor-lista-favoritos" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <!-- 3. Modal de Mi Receta (Simulador) -->
+    <div id="modal-receta" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 10px; width: 80%; max-width: 700px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
+            <span id="btn-cerrar-receta" style="position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #999;">✖</span>
+            <h2 style="margin-top: 0; color: #3498db;">🛒 Simulador de Ahorro</h2>
+            <div id="contenedor-lista-receta" style="margin-top: 20px; border-bottom: 2px solid #eee; padding-bottom: 20px;"></div>
+            <div id="panel-resultados-ahorro" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <!-- EL MENÚ SIEMPRE ARRIBA -->
+    <!-- EL MENÚ SIEMPRE ARRIBA (Con Indicador de Confianza) -->
+    <!-- EL MENÚ SIEMPRE ARRIBA (Centrado con Indicador a la derecha) -->
+    <!-- EL MENÚ SIEMPRE ARRIBA -->
+    <!-- EL MENÚ SIEMPRE ARRIBA -->
+    <!-- EL MENÚ SIEMPRE ARRIBA (Animado) -->
+    <nav>
+        <!-- Riel de movimiento -->
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <!-- GRUPO 1 -->
+                <a href="#">Categorías</a>
+                <a href="#">Suerte</a>
+                <a href="#">Dispositivos Médicos</a>
+                <a href="#">Los más comprados</a>
+                <a href="#">Cuidado del bebé</a>
+                <a href="#">Vitaminas</a>
+                <a href="#">Cuidado Personal</a>
+                <a href="#">Dermocosmética</a>
+                
+                <!-- GRUPO 2 (Duplicado exacto para el efecto infinito) -->
+                <a href="#">Categorías</a>
+                <a href="#">Suerte</a>
+                <a href="#">Dispositivos Médicos</a>
+                <a href="#">Los más comprados</a>
+                <a href="#">Cuidado del bebé</a>
+                <a href="#">Vitaminas</a>
+                <a href="#">Cuidado Personal</a>
+                <a href="#">Dermocosmética</a>
+            </div>
+        </div>
+
+        <!-- Indicador de Confianza anclado a la derecha (No se mueve) -->
+        <div style="font-size: 13px; color: #10b981; font-weight: 800; display: flex; align-items: center; background: #e6fcf5; padding: 6px 15px; border-radius: 20px; white-space: nowrap; flex-shrink: 0;">
+            <span>🚚 Envíos a Piura y todo el Perú</span>
+        </div>
+    </nav>
+
+    <!-- LA CAJA PRINCIPAL -->
+    <main>
+        
+        <!-- A) LA RULETA (Oculta al inicio) -->
+        <div id="pantalla-ruleta" style="display: none; text-align: center; padding: 40px; background: #fff9fb; border-radius: 15px; margin-bottom: 20px; border: 2px dashed #ff9ff3; position: relative;">
+            <h2 id="titulo-ruleta" style="color: #9b59b6; margin-top: 0;">🎡 La Ruleta de la Suerte</h2>
+            <p id="subtitulo-ruleta" style="color: #666; margin-bottom: 30px;">¡Gira y descubre descuentos sorpresa escondidos en las farmacias!</p>
+            
+            <div id="contenedor-canvas-ruleta" style="position: relative; width: 350px; height: 350px; margin: 0 auto;">
+                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 35px solid #e74c3c; z-index: 10; filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.3));"></div>
+                <canvas id="ruletaCanvas" width="350" height="350" style="border-radius: 50%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);"></canvas>
+            </div>
+            
+            <button id="btn-girar" style="margin-top: 30px; padding: 15px 50px; font-size: 20px; font-weight: bold; background-color: #2ecc71; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 0 #27ae60, 0 10px 10px rgba(0,0,0,0.2); transition: transform 0.1s;">¡GIRAR RULETA!</button>
+
+            <!-- Modal del Premio -->
+            <div id="modal-premio" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); z-index: 100; width: 90%; max-width: 350px; text-align: center; border: 3px solid #f1c40f;">
+                <span id="cerrar-modal-premio" style="position: absolute; top: 10px; right: 15px; font-size: 22px; cursor: pointer; color: #aaa; font-weight: bold;">✖</span>
+                <h3 style="color: #e74c3c; margin-top: 10px; font-size: 24px;" id="texto-premio-ganado">¡Ganaste!</h3>
+                <p style="color: #555; font-size: 14px;">Hemos aplicado tu suerte a este producto especial:</p>
+                <div id="producto-ganador-ruleta" style="margin: 15px 0;"></div>
+            </div>
+
+            <!-- Alternativas -->
+            <div id="seccion-otros-descuentos" style="display: none; margin-top: 20px;">
+                <h3 style="color: #9b59b6; border-bottom: 2px dashed #ff9ff3; padding-bottom: 10px; display: inline-block;">🎁 Otros descuentos posibles</h3>
+                <div id="grid-otros-descuentos" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 20px;"></div>
+            </div>
+        </div>
+
+        <!-- B) LA CAJA DEL CATÁLOGO NORMAL Y CATEGORÍAS -->
+        <div id="vista-catalogo">
+            <div id="seccion-recomendados" style="margin-bottom: 30px;"></div>
+            
+            <div style="display: flex; gap: 25px; align-items: flex-start;">
+                <!-- LA BARRA LATERAL CON VALORES DE FILTRO -->
+                <aside id="barra-lateral" style="display: none; width: 240px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); flex-shrink: 0; border: 1px solid #eee;">
+                    <h3 style="margin-top: 0; color: #2c3e50; font-size: 16px; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Subcategorías</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: #555; font-size: 14px; line-height: 2.2;">
+                        <li><label style="cursor: pointer;"><input type="checkbox" class="filtro-cb" data-tipo="categoria" value="pañal" style="margin-right: 8px;"> Pañales</label></li>
+                        <li><label style="cursor: pointer;"><input type="checkbox" class="filtro-cb" data-tipo="categoria" value="shampoo" style="margin-right: 8px;"> Shampoo para Niños</label></li>
+                        <li><label style="cursor: pointer;"><input type="checkbox" class="filtro-cb" data-tipo="categoria" value="crema" style="margin-right: 8px;"> Dermo Cuidado</label></li>
+                        <li><label style="cursor: pointer;"><input type="checkbox" class="filtro-cb" data-tipo="categoria" value="paracetamol|ibuprofeno" style="margin-right: 8px;"> Analgésicos y Fiebre</label></li>
+                        <li><label style="cursor: pointer;"><input type="checkbox" class="filtro-cb" data-tipo="categoria" value="vitamina" style="margin-right: 8px;"> Vitaminas</label></li>
+                    </ul>
+
+                    <h3 style="margin-top: 25px; color: #2c3e50; font-size: 16px; border-bottom: 2px solid #e74c3c; padding-bottom: 10px;">Marca</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: #555; font-size: 14px; line-height: 2.2;">
+                        <li><label style="cursor: pointer;"><input type="checkbox" class="filtro-cb" data-tipo="marca" value="huggies" style="margin-right: 8px;"> HUGGIES</label></li>
+                        <li><label style="cursor: pointer;"><input type="checkbox" class="filtro-cb" data-tipo="marca" value="ninet" style="margin-right: 8px;"> NINET</label></li>
+                        <li><label style="cursor: pointer;"><input type="checkbox" class="filtro-cb" data-tipo="marca" value="panadol" style="margin-right: 8px;"> PANADOL</label></li>
+                        <li><label style="cursor: pointer;"><input type="checkbox" class="filtro-cb" data-tipo="marca" value="babylac" style="margin-right: 8px;"> BABYLAC</label></li>
+                    </ul>
+                </aside>
+
+                <!-- ZONA DEL CATÁLOGO DE PRODUCTOS (Lado Derecho) -->
+                <div style="flex-grow: 1;">
+                    <h2 id="titulo-catalogo" style="margin-top: 0;">💊 Catálogo de Productos</h2>
+                    <section class="productos-fijos" id="contenedor-productos"></section>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // ==========================================
+        // 1. VARIABLES Y ELEMENTOS DOM
+        // ==========================================
+        const contenedorProductos = document.getElementById('contenedor-productos');
+        const inputBusqueda = document.getElementById('input-busqueda');
+        const btnBuscar = document.getElementById('btn-buscar');
+        const cajaSugerencias = document.getElementById('caja-sugerencias');
+        
+        const btnLogin = document.getElementById('btn-login');
+        const modalLogin = document.getElementById('modal-login');
+        const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+        const btnIngresar = document.getElementById('btn-ingresar');
+        
+        const btnFavoritos = document.getElementById('btn-favoritos');
+        const modalFavoritos = document.getElementById('modal-favoritos');
+        const btnCerrarFavoritos = document.getElementById('btn-cerrar-favoritos');
+        const contenedorListaFavoritos = document.getElementById('contenedor-lista-favoritos');
+        
+        const palabrasClave = ['paracetamol', 'ibuprofeno', 'amoxicilina', 'panadol', 'vitamina', 'pañal', 'termometro'];
+
+        // ==========================================
+        // 🎨 GENERADOR DEL LOGO VECTORIAL (CANVAS)
+        // ==========================================
+        function dibujarLogoPropio() {
+            const canvas = document.getElementById('logo-animal');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Silueta geométrica del Lobo/Perro Guardián
+            ctx.fillStyle = '#002878'; // Azul intenso
+            ctx.beginPath();
+            ctx.moveTo(10, 45); // Base cuello
+            ctx.lineTo(20, 22); // Pecho
+            ctx.lineTo(14, 18); // Mandíbula
+            ctx.lineTo(4, 18);  // Hocico
+            ctx.lineTo(12, 10); // Frente
+            ctx.lineTo(22, 6);  // Base oreja
+            ctx.lineTo(26, 0);  // Punta oreja
+            ctx.lineTo(32, 12); // Nuca
+            ctx.lineTo(44, 25); // Lomo
+            ctx.lineTo(38, 45); // Base derecha
+            ctx.closePath();
+            ctx.fill();
+
+            // 2. Cruz Médica (espacio negativo/superpuesta)
+            ctx.fillStyle = '#10b981'; // Verde salud
+            ctx.fillRect(22, 22, 6, 16); // Vertical
+            ctx.fillRect(17, 27, 16, 6); // Horizontal
+            
+            // 3. Ojo
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.moveTo(16, 12);
+            ctx.lineTo(20, 14);
+            ctx.lineTo(17, 15);
+            ctx.fill();
+        }
+
+        // ==========================================
+        // 2. INICIO Y SESIÓN
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            dibujarLogoPropio(); // Dibujamos el logo al cargar
+
+            const usuarioGuardado = localStorage.getItem('usuarioFarmaciaxs');
+            if (usuarioGuardado) {
+                const nombreUsuario = usuarioGuardado.split('@')[0];
+                btnLogin.innerHTML = `👤 Hola, ${nombreUsuario}`;
+                btnLogin.style.backgroundColor = '#f39c12';
+                btnLogin.style.color = 'white';
+                btnLogin.style.borderColor = '#f39c12';
+            }
+            setTimeout(() => { inputBusqueda.value = ''; }, 100);
+            cargarInicio();
+        });
+
+        // ==========================================
+        // 3. DIBUJO DE TARJETAS Y BANNER ROTATIVO
+        // ==========================================
+        // ==========================================
+        // 3. DIBUJO DE TARJETAS Y PAGINACIÓN CLÁSICA
+        // ==========================================
+        window.paginaActualCatalogo = 1;
+        const PRODUCTOS_POR_PAGINA = 16; // Mostrará 16 productos (4 filas de 4)
+
+        function dibujarTarjetas(datosFarmacia) {
+            const seccionRecomendados = document.getElementById('seccion-recomendados');
+            if (window.motorBanner) clearInterval(window.motorBanner);
+
+            // 1. BANNER GIGANTE (Solo se muestra en la primera página)
+            if (seccionRecomendados && datosFarmacia.length > 0 && window.paginaActualCatalogo === 1) {
+                seccionRecomendados.style.display = 'block';
+                const ofertasOrdenadas = [...datosFarmacia].sort((a, b) => parseFloat(a.precio.replace(/[^\d.-]/g, '')) - parseFloat(b.precio.replace(/[^\d.-]/g, '')));
+                const topOfertas = ofertasOrdenadas.slice(0, 3);
+                let indiceBanner = 0;
+
+                function renderizarBanner(oferta) {
+                    const visualGanador = (oferta.imagen && oferta.imagen.startsWith('http')) 
+                        ? `<img src="${oferta.imagen}" alt="Oferta" style="height: 220px; width: auto; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4)); transform: scale(1.1);">` 
+                        : `<span style="font-size: 100px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2));">💊</span>`;
+
+                    seccionRecomendados.innerHTML = `
+                        <div style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); border-radius: 20px; padding: 40px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 15px 30px rgba(0,114,255,0.3); color: white; position: relative; overflow: hidden; animation: aparicionSuave 0.6s ease-in-out;">
+                            <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                            <div style="position: absolute; bottom: -80px; left: 20%; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                            <div style="max-width: 60%; z-index: 1;">
+                                <span style="background: #ff4757; color: white; padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">¡Precio Más Bajo Detectado!</span>
+                                <h3 style="font-size: 28px; margin: 20px 0 10px 0; line-height: 1.2;">${oferta.nombre}</h3>
+                                <p style="font-size: 16px; opacity: 0.9; margin-bottom: 20px; font-weight: 500;">📍 Disponible en <span style="background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 5px;">${oferta.farmacia}</span></p>
+                                <div style="display: flex; align-items: center; gap: 20px;">
+                                    <div style="font-size: 45px; font-weight: 900;">${oferta.precio}</div>
+                                    <button onclick="window.open('${oferta.enlace}', '_blank')" style="background: #ffffff; color: #0072ff; border: none; padding: 15px 30px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer;">Comprar Ahora 🛒</button>
+                                </div>
+                            </div>
+                            <div style="width: 35%; text-align: center; z-index: 1;">${visualGanador}</div>
+                        </div>
+                    `;
+                }
+                renderizarBanner(topOfertas[0]);
+                if (topOfertas.length > 1) {
+                    window.motorBanner = setInterval(() => { indiceBanner = (indiceBanner + 1) % topOfertas.length; renderizarBanner(topOfertas[indiceBanner]); }, 4000);
+                }
+            } else if (seccionRecomendados) {
+                seccionRecomendados.style.display = 'none';
+            }
+
+            // 2. LÓGICA MATEMÁTICA DE LA PAGINACIÓN
+            contenedorProductos.innerHTML = ''; 
+
+            if (datosFarmacia.length === 0) {
+                contenedorProductos.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #666; font-size: 18px;">No se encontraron resultados.</div>';
+                return;
+            }
+
+            // Calculamos cuántas páginas hay en total
+            const totalPaginas = Math.ceil(datosFarmacia.length / PRODUCTOS_POR_PAGINA);
+            if (window.paginaActualCatalogo > totalPaginas) window.paginaActualCatalogo = 1;
+
+            // Cortamos el arreglo para obtener solo los 16 productos de la página actual
+            const inicio = (window.paginaActualCatalogo - 1) * PRODUCTOS_POR_PAGINA;
+            const fin = inicio + PRODUCTOS_POR_PAGINA;
+            const productosPagina = datosFarmacia.slice(inicio, fin);
+
+            const usuarioActual = localStorage.getItem('usuarioFarmaciaxs');
+
+            // 3. DIBUJAR TARJETAS
+            productosPagina.forEach(producto => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'producto-fijo';
+                tarjeta.onclick = () => { if(producto.enlace) window.open(producto.enlace, '_blank'); };
+                
+                let accionCorazon = usuarioActual 
+                    ? `onclick="event.stopPropagation(); event.preventDefault(); guardarFavorito('${usuarioActual}', '${JSON.stringify(producto).replace(/'/g, "\\'").replace(/"/g, "&quot;")}', this);"`
+                    : `onclick="event.stopPropagation(); event.preventDefault(); alert('¡Debes iniciar sesión para guardar favoritos!');"`;
+                
+                const visualProducto = (producto.imagen && producto.imagen.startsWith('http')) ? `<img src="${producto.imagen}" alt="Foto" style="width: 80px; height: 80px; object-fit: contain;">` : `<span style="font-size: 45px;">💊</span>`;
+
+                tarjeta.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px; align-items: center;">
+                        <span class="corazon-favorito" style="font-size: 22px; cursor: pointer; color: #ccc;" ${accionCorazon}>🤍</span>
+                        ${visualProducto}
+                        <span onclick="event.stopPropagation(); event.preventDefault(); agregarAReceta('${producto.nombre.replace(/'/g, "\\'")}', '${producto.precio}', '${producto.farmacia}');" 
+                            style="font-size: 22px; cursor: pointer; color: #3498db; font-weight: bold; padding: 0 5px;">[+]</span>
+                    </div>
+                    <p style="margin: 5px 0; font-size: 14px; font-weight: bold; height: 40px; overflow: hidden;">${producto.nombre}</p>
+                    <span style="font-size: 11px; color: #666; background-color: #eee; padding: 3px 8px; border-radius: 10px;">🏷️ ${producto.marca}</span>
+                    <div class="precio-producto">${producto.precio}</div>
+                    <span class="farmacia-tag">📍 ${producto.farmacia}</span>
+                `;
+                contenedorProductos.appendChild(tarjeta);
+            });
+
+            // 4. DIBUJAR LOS BOTONES DE PAGINACIÓN (Al final del catálogo)
+            if (totalPaginas > 1) {
+                const contenedorPaginacion = document.createElement('div');
+                contenedorPaginacion.style.cssText = 'grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 30px; padding-top: 20px; border-top: 2px solid #f0f4f8;';
+
+                // Botón Anterior
+                if (window.paginaActualCatalogo > 1) {
+                    const btnAnt = document.createElement('button');
+                    btnAnt.innerText = '◀ Ant';
+                    btnAnt.className = 'btn-paginacion';
+                    btnAnt.onclick = () => { window.paginaActualCatalogo--; dibujarTarjetas(datosFarmacia); document.getElementById('vista-catalogo').scrollIntoView({ behavior: 'smooth' }); };
+                    contenedorPaginacion.appendChild(btnAnt);
+                }
+
+                // Generar los números de página (Con lógica inteligente para no llenar la pantalla si hay 50 páginas)
+                for (let i = 1; i <= totalPaginas; i++) {
+                    if (i === 1 || i === totalPaginas || (i >= window.paginaActualCatalogo - 1 && i <= window.paginaActualCatalogo + 1)) {
+                        const btnNum = document.createElement('button');
+                        btnNum.innerText = i;
+                        btnNum.className = 'btn-paginacion' + (i === window.paginaActualCatalogo ? ' activo' : '');
+                        btnNum.onclick = () => { window.paginaActualCatalogo = i; dibujarTarjetas(datosFarmacia); document.getElementById('vista-catalogo').scrollIntoView({ behavior: 'smooth' }); };
+                        contenedorPaginacion.appendChild(btnNum);
+                    } else if (i === window.paginaActualCatalogo - 2 || i === window.paginaActualCatalogo + 2) {
+                        const puntos = document.createElement('span');
+                        puntos.innerText = '...';
+                        puntos.style.color = '#a0aec0';
+                        contenedorPaginacion.appendChild(puntos);
+                    }
+                }
+
+                // Botón Siguiente
+                if (window.paginaActualCatalogo < totalPaginas) {
+                    const btnSig = document.createElement('button');
+                    btnSig.innerText = 'Sig ▶';
+                    btnSig.className = 'btn-paginacion';
+                    btnSig.onclick = () => { window.paginaActualCatalogo++; dibujarTarjetas(datosFarmacia); document.getElementById('vista-catalogo').scrollIntoView({ behavior: 'smooth' }); };
+                    contenedorPaginacion.appendChild(btnSig);
+                }
+
+                contenedorProductos.appendChild(contenedorPaginacion);
+            }
+        }
+
+        // ==========================================
+        // 4. FUNCIONES DE RED (FETCH) Y FILTROS
+        // ==========================================
+        window.productosGlobales = []; 
+
+        async function cargarInicio() {
+            try {
+                const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/inicio');
+                const datos = await res.json();
+                window.productosGlobales = datos; 
+                aplicarFiltros(); 
+            } catch (e) { console.error(e); }
+        }
+
+        async function buscarEnFarmacias(producto) {
+            contenedorProductos.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; font-size: 20px;">⏳ Buscando...</div>`;
+            try {
+                const res = await fetch(`https://farmaciaxs-api-backend.onrender.com/api/buscar?producto=${producto}`);
+                const datos = await res.json();
+                window.productosGlobales = datos; 
+                aplicarFiltros(); 
+            } catch (e) { 
+                contenedorProductos.innerHTML = '<div style="grid-column: 1 / -1; text-align: center;">Error de conexión.</div>'; 
+            }
+        }
+
+        async function aplicarFiltros(evento = null) {
+            // 🔥 Si el usuario hace clic en un filtro, regresamos a la página 1 automáticamente
+            if (evento !== null) window.paginaActualCatalogo = 1;
+
+            const alturaActual = contenedorProductos.offsetHeight;
+            if (alturaActual > 200) contenedorProductos.style.minHeight = alturaActual + 'px';
+
+            const esClicManual = (evento !== null); 
+            const marcasMarcadas = Array.from(document.querySelectorAll('.filtro-cb[data-tipo="marca"]:checked')).map(cb => cb.value);
+            const catsMarcadas = Array.from(document.querySelectorAll('.filtro-cb[data-tipo="categoria"]:checked')).map(cb => cb.value);
+
+            let datosBase = window.productosGlobales || [];
+
+            if (esClicManual) {
+                if (catsMarcadas.length > 0) {
+                    const palabraClave = catsMarcadas[0].split('|')[0]; 
+                    contenedorProductos.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; font-size: 18px; color: #3498db; font-weight: bold;">⏳ Buscando en los pasillos...</div>`;
+                    try {
+                        const res = await fetch(`https://farmaciaxs-api-backend.onrender.com/api/buscar?producto=${palabraClave}`);
+                        if(res.ok) datosBase = await res.json();
+                    } catch (e) { }
+                } else if (marcasMarcadas.length === 0 && catsMarcadas.length === 0) {
+                    contenedorProductos.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; font-size: 18px; color: #666;">⏳ Restaurando catálogo...</div>`;
+                    try {
+                        const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/inicio');
+                        if(res.ok) datosBase = await res.json();
+                    } catch(e) {}
+                }
+            }
+
+            let datosFiltrados = datosBase;
+
+            if (catsMarcadas.length > 0) {
+                datosFiltrados = datosFiltrados.filter(p => {
+                    const nombreProd = p.nombre.toLowerCase();
+                    return catsMarcadas.some(cat => cat.split('|').some(palabra => nombreProd.includes(palabra)));
+                });
+            }
+
+            if (marcasMarcadas.length > 0) {
+                datosFiltrados = datosFiltrados.filter(p => {
+                    const nombreProd = p.nombre.toLowerCase();
+                    const marcaProd = p.marca ? p.marca.toLowerCase() : "";
+                    return marcasMarcadas.some(m => nombreProd.includes(m) || marcaProd.includes(m));
+                });
+            }
+            
+            dibujarTarjetas(datosFiltrados);
+            setTimeout(() => { contenedorProductos.style.minHeight = '500px'; }, 50);
+        }
+
+        document.querySelectorAll('.filtro-cb').forEach(checkbox => {
+            checkbox.addEventListener('change', aplicarFiltros);
+        });
+
+        // ==========================================
+        // 5. CONTROL DE VISTAS (PANTALLAS)
+        // ==========================================
+        function cambiarPantalla(pantallaSolicitada) {
+            const vistaRuleta = document.getElementById('pantalla-ruleta');
+            const vistaCatalogo = document.getElementById('vista-catalogo');
+            const barraLateral = document.getElementById('barra-lateral');
+            const tituloCatalogo = document.getElementById('titulo-catalogo');
+            const seccionRecomendados = document.getElementById('seccion-recomendados'); // Atrapamos el banner
+
+            // Apagamos TODO por defecto
+            vistaRuleta.style.display = 'none';
+            vistaCatalogo.style.display = 'none';
+            barraLateral.style.display = 'none';
+            if (seccionRecomendados) seccionRecomendados.style.display = 'none'; 
+
+            if (pantallaSolicitada === 'ruleta') {
+                vistaRuleta.style.display = 'block';
+                document.getElementById('contenedor-canvas-ruleta').style.display = 'block';
+                document.getElementById('btn-girar').style.display = 'inline-block';
+                document.getElementById('titulo-ruleta').style.display = 'block';
+                document.getElementById('subtitulo-ruleta').style.display = 'block';
+                document.getElementById('seccion-otros-descuentos').style.display = 'none';
+                document.getElementById('modal-premio').style.display = 'none';
+                
+            } else if (pantallaSolicitada === 'catalogo-normal') {
+                vistaCatalogo.style.display = 'block';
+                barraLateral.style.display = 'none'; 
+                // 🔥 EL BANNER GIGANTE SOLO VIVE AQUÍ (Inicio)
+                if (seccionRecomendados) seccionRecomendados.style.display = 'block'; 
+                tituloCatalogo.innerText = '💊 Catálogo de Productos';
+                
+            } else if (pantallaSolicitada === 'categorias') {
+                vistaCatalogo.style.display = 'block';
+                barraLateral.style.display = 'block'; 
+                // 🔥 EN CATEGORÍAS EL BANNER DESAPARECE PARA SIEMPRE
+                if (seccionRecomendados) seccionRecomendados.style.display = 'none'; 
+                tituloCatalogo.innerText = '🛒 Explorando Categorías';
+            }
+        }
+
+        // ==========================================
+        // 6. EVENTOS: BUSCADOR Y MENÚ
+        // ==========================================
+        inputBusqueda.addEventListener('input', () => {
+            const valor = inputBusqueda.value.toLowerCase();
+            cajaSugerencias.innerHTML = ''; 
+            if (valor.length > 0) {
+                const filtradas = palabrasClave.filter(palabra => palabra.startsWith(valor));
+                if (filtradas.length > 0) {
+                    cajaSugerencias.style.display = 'block';
+                    filtradas.forEach(palabra => {
+                        const divS = document.createElement('div');
+                        divS.style.cssText = 'padding: 10px 20px; cursor: pointer; border-bottom: 1px solid #eee;';
+                        divS.innerText = palabra;
+                        divS.onmouseover = () => divS.style.backgroundColor = '#f0f4f8';
+                        divS.onmouseout = () => divS.style.backgroundColor = 'white';
+                        divS.onclick = () => { 
+                            inputBusqueda.value = palabra; 
+                            cajaSugerencias.style.display = 'none'; 
+                            document.querySelectorAll('.filtro-cb').forEach(cb => cb.checked = false);
+                            buscarEnFarmacias(palabra); 
+                            cambiarPantalla('catalogo-normal'); 
+                        };
+                        cajaSugerencias.appendChild(divS);
+                    });
+                } else { cajaSugerencias.style.display = 'none'; }
+            } else {
+                cajaSugerencias.style.display = 'none';
+                cambiarPantalla('catalogo-normal');
+                cargarInicio();
+            }
+        });
+        
+        document.addEventListener('click', (e) => { if (!e.target.closest('.buscador')) cajaSugerencias.style.display = 'none'; });
+        
+        btnBuscar.addEventListener('click', () => { 
+            const term = inputBusqueda.value.trim(); 
+            if (term !== "") { 
+                document.querySelectorAll('.filtro-cb').forEach(cb => cb.checked = false);
+                buscarEnFarmacias(term); 
+                cambiarPantalla('catalogo-normal'); 
+            } 
+        });
+        
+        inputBusqueda.addEventListener('keypress', (e) => { 
+            if (e.key === 'Enter') { 
+                const term = inputBusqueda.value.trim(); 
+                if (term !== "") { 
+                    document.querySelectorAll('.filtro-cb').forEach(cb => cb.checked = false);
+                    buscarEnFarmacias(term); 
+                    cambiarPantalla('catalogo-normal'); 
+                } 
+                cajaSugerencias.style.display = 'none'; 
+            } 
+        });
+
+        document.querySelectorAll('nav a').forEach(boton => {
+            boton.addEventListener('click', (e) => {
+                e.preventDefault();
+                const text = e.target.innerText;
+
+                // Limpiamos los filtros laterales
+                document.querySelectorAll('.filtro-cb').forEach(cb => cb.checked = false);
+
+                if (text === 'Suerte') {
+                    cambiarPantalla('ruleta');
+                    dibujarRuleta();
+                } else if (text === 'Categorías') {
+                    cambiarPantalla('categorias');
+                    inputBusqueda.value = ''; 
+                    cargarInicio();
+                } else {
+                    cambiarPantalla('catalogo-normal');
+                    
+                    // La barra del usuario queda limpia y profesional
+                    inputBusqueda.value = ''; 
+                    
+                    // Usamos palabras que sí existen en tu BD de prueba por ahora
+                    if (text === 'Los más comprados') { 
+                        cargarInicio(); 
+                    }
+                    else if (text === 'Dispositivos Médicos') { 
+                        buscarEnFarmacias('termometro'); 
+                    }
+                    else if (text === 'Cuidado del bebé') { 
+                        buscarEnFarmacias('pañal'); 
+                    }
+                    else if (text === 'Vitaminas') { 
+                        buscarEnFarmacias('vitamina'); 
+                    }
+                }
+            });
+        });
+
+        // ==========================================
+        // 7. CEREBRO: SIMULADOR DE AHORRO (MI RECETA)
+        // ==========================================
+        let miReceta = []; 
+        const btnReceta = document.getElementById('btn-receta');
+        const modalReceta = document.getElementById('modal-receta');
+        const btnCerrarReceta = document.getElementById('btn-cerrar-receta');
+        const contenedorListaReceta = document.getElementById('contenedor-lista-receta');
+        const panelResultadosAhorro = document.getElementById('panel-resultados-ahorro');
+
+        function agregarAReceta(nombre, precioStr, farmacia) {
+            const precioNum = parseFloat(precioStr.replace(/[^\d.-]/g, ''));
+            const existe = miReceta.find(p => p.nombre === nombre && p.farmacia === farmacia);
+            if (!existe) {
+                miReceta.push({ nombre, precio: precioNum, farmacia, precioString: precioStr });
+                btnReceta.innerText = `🛒 Mi Receta (${miReceta.length})`;
+                btnReceta.style.backgroundColor = '#3498db';
+                btnReceta.style.color = 'white';
+                setTimeout(() => {
+                    btnReceta.style.backgroundColor = 'white';
+                    btnReceta.style.color = 'black';
+                }, 300);
+            }
+        }
+
+        btnReceta.addEventListener('click', () => { modalReceta.style.display = 'flex'; actualizarVentanaReceta(); });
+        btnCerrarReceta.addEventListener('click', () => { modalReceta.style.display = 'none'; });
+
+        window.datosCotizacion = null; 
+
+        async function actualizarVentanaReceta() {
+            contenedorListaReceta.innerHTML = '';
+            if (miReceta.length === 0) {
+                contenedorListaReceta.innerHTML = '<p style="text-align:center; color: #666;">Tu receta está vacía. Usa el botón [+] azul en los productos para agregarlos.</p>';
+                panelResultadosAhorro.innerHTML = '';
+                return;
+            }
+
+            miReceta.forEach((prod, index) => {
+                const item = document.createElement('div');
+                item.style.cssText = 'display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #f0f4f8; align-items: center;';
+                item.innerHTML = `
+                    <div style="flex-grow: 1;">
+                        <b style="font-size: 14px;">${prod.nombre}</b><br>
+                        <span style="font-size: 12px; color: #7f8c8d;">📍 Elegido en: ${prod.farmacia}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <b style="color: #2ecc71; font-size: 16px;">${prod.precioString}</b>
+                        <span style="cursor: pointer; color: #e74c3c; font-size: 18px; padding: 5px; background: #ffebee; border-radius: 5px;" 
+                            onclick="eliminarDeReceta(${index})" title="Quitar de la lista">🗑️</span>
+                    </div>
+                `;
+                contenedorListaReceta.appendChild(item);
+            });
+
+            panelResultadosAhorro.innerHTML = '<div style="text-align: center; padding: 20px;"><p style="font-size: 18px; color: #3498db; font-weight: bold;">🧠 El algoritmo está calculando la ruta más barata...</p></div>';
+
+            try {
+                const respuesta = await fetch('https://farmaciaxs-api-backend.onrender.com/api/cotizar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ receta: miReceta })
+                });
+                window.datosCotizacion = await respuesta.json();
+                dibujarPanelDinamico('optimo');
+            } catch (error) {
+                panelResultadosAhorro.innerHTML = '<p style="color: red; text-align: center;">Error conectando con el algoritmo.</p>';
+            }
+        }
+
+        window.dibujarPanelDinamico = function(tipo) {
+            const c = window.datosCotizacion;
+            if (!c) return;
+
+            let conf = { 
+                optimo: { titulo: "✨ Compra Inteligente (Combinada)", total: c.optimo, lista: c.detallesOptimos, color: "#2ecc71", bg: "#e8f8f5", texto: "Si compras cada producto en su farmacia más barata, tu total óptimo es:" },
+                mifarma: { titulo: "💊 Compra total en Mifarma", total: c.mifarma, lista: c.detallesMifarma, color: "#9b59b6", bg: "#f4ecf7", texto: "Si decides por comodidad comprar todo en Mifarma, tu total es:" },
+                inkafarma: { titulo: "💊 Compra total en Inkafarma", total: c.inkafarma, lista: c.detallesInkafarma, color: "#e67e22", bg: "#fdf2e9", texto: "Si decides por comodidad comprar todo en Inkafarma, tu total es:" },
+                boticas: { titulo: "💊 Compra total en Boticas Perú", total: c.boticas, lista: c.detallesBoticas, color: "#e74c3c", bg: "#fdedec", texto: "Si decides por comodidad comprar todo en Boticas Perú, tu total es:" }
+            };
+            const actual = conf[tipo];
+
+            let html = `
+                <h4 style="text-align: center; color: #555; margin-bottom: 15px;">📊 Haz clic en una opción para ver los enlaces de compra:</h4>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; margin-bottom: 20px;">
+                    <div onclick="dibujarPanelDinamico('optimo')" style="cursor: pointer; background: ${tipo==='optimo'?'#e8f8f5':'#fdfefe'}; padding: 10px; border-radius: 8px; border: 2px solid ${tipo==='optimo'?'#2ecc71':'#ddd'}; transition: 0.2s;" onmouseover="this.style.borderColor='#2ecc71'" onmouseout="this.style.borderColor='${tipo==='optimo'?'#2ecc71':'#ddd'}'">
+                        <p style="margin: 0; font-size: 11px; color: #666; font-weight: bold;">Combinada</p><b style="color: #2ecc71; font-size: 15px;">S/ ${c.optimo.toFixed(2)}</b>
+                    </div>
+                    <div onclick="dibujarPanelDinamico('mifarma')" style="cursor: pointer; background: ${tipo==='mifarma'?'#f4ecf7':'#fdfefe'}; padding: 10px; border-radius: 8px; border: 2px solid ${tipo==='mifarma'?'#9b59b6':'#ddd'}; transition: 0.2s;" onmouseover="this.style.borderColor='#9b59b6'" onmouseout="this.style.borderColor='${tipo==='mifarma'?'#9b59b6':'#ddd'}'">
+                        <p style="margin: 0; font-size: 11px; color: #666;">En Mifarma</p><b style="color: #333; font-size: 15px;">S/ ${c.mifarma.toFixed(2)}</b>
+                    </div>
+                    <div onclick="dibujarPanelDinamico('inkafarma')" style="cursor: pointer; background: ${tipo==='inkafarma'?'#fdf2e9':'#fdfefe'}; padding: 10px; border-radius: 8px; border: 2px solid ${tipo==='inkafarma'?'#e67e22':'#ddd'}; transition: 0.2s;" onmouseover="this.style.borderColor='#e67e22'" onmouseout="this.style.borderColor='${tipo==='inkafarma'?'#e67e22':'#ddd'}'">
+                        <p style="margin: 0; font-size: 11px; color: #666;">En Inkafarma</p><b style="color: #333; font-size: 15px;">S/ ${c.inkafarma.toFixed(2)}</b>
+                    </div>
+                    <div onclick="dibujarPanelDinamico('boticas')" style="cursor: pointer; background: ${tipo==='boticas'?'#fdedec':'#fdfefe'}; padding: 10px; border-radius: 8px; border: 2px solid ${tipo==='boticas'?'#e74c3c':'#ddd'}; transition: 0.2s;" onmouseover="this.style.borderColor='#e74c3c'" onmouseout="this.style.borderColor='${tipo==='boticas'?'#e74c3c':'#ddd'}'">
+                        <p style="margin: 0; font-size: 11px; color: #666;">En Boticas</p><b style="color: #333; font-size: 15px;">S/ ${c.boticas.toFixed(2)}</b>
+                    </div>
+                </div>
+                
+                <div style="background: ${actual.bg}; padding: 20px; border-radius: 10px; border: 2px solid ${actual.color}; box-shadow: 0 4px 6px rgba(0,0,0, 0.05);">
+                    <h3 style="margin-top: 0; color: ${actual.color}; text-align: center;">${actual.titulo}</h3>
+                    <p style="margin: 5px 0 15px 0; color: #555; text-align: center;">${actual.texto} <b style="font-size: 24px; color: ${actual.color};">S/ ${actual.total.toFixed(2)}</b></p>
+                    <h4 style="margin: 10px 0 5px 0; color: ${actual.color}; border-bottom: 1px solid #ccc; padding-bottom: 5px;">📍 Enlaces de Compra:</h4>
+            `;
+
+            actual.lista.forEach(item => {
+                const advertenciaHTML = item.falta ? `<br><span style="font-size: 10px; color: #e74c3c; font-weight: bold;">⚠️ No hallado en esta farmacia (usando precio original)</span>` : '';
+                html += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #ccc;">
+                        <div style="flex-grow: 1; padding-right: 10px;">
+                            <span style="font-size: 13px; font-weight: bold; color: #333;">${item.nombre}</span><br>
+                            <span style="font-size: 12px; color: #666;">Comprar en: <b style="color: ${actual.color};">${item.farmacia}</b> a <span style="font-weight: bold;">${item.precioString}</span></span>
+                            ${advertenciaHTML}
+                        </div>
+                        <div><button onclick="window.open('${item.enlace}', '_blank')" style="background: ${actual.color}; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold;">Comprar 🛒</button></div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            panelResultadosAhorro.innerHTML = html;
+        }
+
+        window.eliminarDeReceta = function(index) {
+            miReceta.splice(index, 1);
+            btnReceta.innerText = `🛒 Mi Receta (${miReceta.length})`;
+            actualizarVentanaReceta(); 
+        }
+
+        // ==========================================
+        // 8. EVENTOS: MODALES Y FAVORITOS
+        // ==========================================
+        async function guardarFavorito(email, productoStr, elementoCorazon) {
+            elementoCorazon.innerText = '❤️';
+            elementoCorazon.style.transform = 'scale(1.2)';
+            setTimeout(() => elementoCorazon.style.transform = 'scale(1)', 200);
+
+            const productoObj = JSON.parse(productoStr.replace(/&quot;/g, '"'));
+            try {
+                await fetch('https://farmaciaxs-api-backend.onrender.com/api/favoritos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, producto: productoObj })
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function eliminarFavorito(email, productoNombre, farmacia, elementoTarjeta) {
+            if(!confirm("¿Estás seguro de eliminar este producto de tu botiquín?")) return;
+            try {
+                const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/favoritos', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, productoNombre: productoNombre, farmacia: farmacia })
+                });
+                if (res.ok) {
+                    elementoTarjeta.style.transition = "opacity 0.3s ease";
+                    elementoTarjeta.style.opacity = "0";
+                    setTimeout(() => {
+                        elementoTarjeta.remove();
+                        document.querySelectorAll('.producto-fijo').forEach(tarjetaCatalogo => {
+                            const nombreTarjeta = tarjetaCatalogo.querySelector('p').innerText;
+                            if (nombreTarjeta === productoNombre) {
+                                const corazon = tarjetaCatalogo.querySelector('.corazon-favorito');
+                                if (corazon) {
+                                    corazon.innerText = '🤍';
+                                    corazon.style.color = '#ccc';
+                                }
+                            }
+                        });
+                        const contenedor = document.getElementById('contenedor-lista-favoritos');
+                        if (contenedor.children.length === 0) {
+                            contenedor.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: #666;">Tu botiquín está vacío. ¡Dale clic al corazón blanco en algún producto!</p>';
+                        }
+                    }, 300);
+                }
+            } catch (error) { console.error("Error al eliminar el favorito", error); }
+        }
+
+        async function toggleAlertaPrecio(email, productoNombre, farmacia, btnElement) {
+            const textoOriginal = btnElement.innerText;
+            btnElement.innerText = "⏳ Guardando...";
+            try {
+                const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/favoritos/alerta', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, productoNombre: productoNombre, farmacia: farmacia })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    if (data.estado === true) {
+                        btnElement.innerText = "✅ Alerta Activada";
+                        btnElement.style.background = "#2ecc71"; 
+                    } else {
+                        btnElement.innerText = "📉 Avisar si baja";
+                        btnElement.style.background = "#3498db"; 
+                    }
+                } else {
+                    btnElement.innerText = "Error";
+                    setTimeout(() => btnElement.innerText = textoOriginal, 2000);
+                }
+            } catch (error) {
+                btnElement.innerText = "Error de red";
+                setTimeout(() => btnElement.innerText = textoOriginal, 2000);
+            }
+        }
+
+        btnLogin.addEventListener('click', () => {
+            if (localStorage.getItem('usuarioFarmaciaxs')) {
+                if (confirm("¿Deseas cerrar tu sesión actual?")) {
+                    localStorage.removeItem('usuarioFarmaciaxs');
+                    location.reload();
+                }
+            } else { modalLogin.style.display = 'flex'; }
+        });
+        btnCerrarModal.addEventListener('click', () => { modalLogin.style.display = 'none'; });
+
+        btnIngresar.addEventListener('click', async () => {
+            const email = document.getElementById('email-input').value.trim();
+            const pass = document.getElementById('pass-input').value.trim();
+            if(email && pass) {
+                btnIngresar.innerText = "Conectando...";
+                try {
+                    const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password: pass })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        modalLogin.style.display = 'none';
+                        localStorage.setItem('usuarioFarmaciaxs', data.email);
+                        btnLogin.innerHTML = `👤 Hola, ${data.email.split('@')[0]}`;
+                        btnLogin.style.backgroundColor = '#f39c12';
+                        btnLogin.style.color = 'white';
+                        btnLogin.style.borderColor = '#f39c12';
+                        cargarInicio(); 
+                    } else { alert(data.error); }
+                } catch (e) { alert("Error conectando con el servidor."); } 
+                finally { btnIngresar.innerText = "Entrar / Registrarme"; }
+            } else { alert("Ingresa correo y contraseña."); }
+        });
+
+        btnFavoritos.addEventListener('click', async () => {
+            const usuarioActual = localStorage.getItem('usuarioFarmaciaxs');
+            if (!usuarioActual) { alert("Debes iniciar sesión para ver tus favoritos."); return; }
+            modalFavoritos.style.display = 'flex';
+            contenedorListaFavoritos.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">⏳ Buscando tus medicamentos guardados...</p>';
+
+            try {
+                const respuesta = await fetch(`https://farmaciaxs-api-backend.onrender.com/api/favoritos/${encodeURIComponent(usuarioActual)}`);
+                if (!respuesta.ok) throw new Error("Error en ruta.");
+                const misFavoritos = await respuesta.json();
+                contenedorListaFavoritos.innerHTML = ''; 
+
+                if (!Array.isArray(misFavoritos) || misFavoritos.length === 0) {
+                    contenedorListaFavoritos.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: #666;">Aún no tienes productos guardados en tu botiquín.</p>';
+                    return;
+                }
+
+                misFavoritos.forEach(producto => {
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'tarjeta-favorita-item';
+                    tarjeta.style.cssText = 'border: 1px solid #ff9ff3; padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; background-color: #fff9fb;';
+                    tarjeta.onclick = () => { if(producto.enlace) window.open(producto.enlace, '_blank'); };
+                    
+                    const alertaActivada = producto.alertaActiva === true;
+                    const textoBoton = alertaActivada ? "✅ Alerta Activada" : "📉 Avisar si baja";
+                    const colorBoton = alertaActivada ? "#2ecc71" : "#3498db"; 
+                    const sinStock = producto.stock === false;
+                    const botonAlerta = sinStock 
+                        ? `<button onclick="event.stopPropagation(); alert('Se programó una alerta. Te enviaremos un correo cuando vuelva a haber stock.');" style="background: #f39c12; color: white; border: none; padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer;">🔔 Avisar Stock</button>`
+                        : `<button onclick="event.stopPropagation(); toggleAlertaPrecio('${usuarioActual}', '${producto.nombre.replace(/'/g, "\\'")}', '${producto.farmacia}', this);" style="background: ${colorBoton}; color: white; border: none; padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background 0.3s;">${textoBoton}</button>`;
+
+                    const opacidad = sinStock ? 'opacity: 0.6;' : 'opacity: 1;';
+                    const etiquetaAgotado = sinStock ? `<div style="background: #e74c3c; color: white; font-size: 10px; font-weight: bold; padding: 3px; margin-bottom: 5px; border-radius: 3px; display: inline-block;">AGOTADO</div>` : '';
+                    tarjeta.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span style="font-size: 30px; ${opacidad}">❤️</span>
+                            <span onclick="event.stopPropagation(); event.preventDefault(); eliminarFavorito('${usuarioActual}', '${producto.nombre.replace(/'/g, "\\'")}', '${producto.farmacia}', this.closest('.tarjeta-favorita-item'));" 
+                            style="font-size: 18px; cursor: pointer; color: #e74c3c; background: #ffebee; padding: 5px; border-radius: 5px; z-index: 10;" 
+                            title="Eliminar de favoritos">🗑️</span>
+                        </div>
+                        <div style="${opacidad}">
+                            ${etiquetaAgotado}
+                            <p style="margin: 10px 0 5px 0; font-size: 14px; font-weight: bold;">${producto.nombre}</p>
+                            <b style="color: #2ecc71; font-size: 18px;">${producto.precio}</b><br>
+                            <span style="font-size: 12px; color: #666;">📍 ${producto.farmacia}</span>
+                        </div>
+                        <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">${botonAlerta}</div>
+                    `;
+                    contenedorListaFavoritos.appendChild(tarjeta);
+                });
+            } catch (error) { 
+                contenedorListaFavoritos.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: red;">Error de conexión.</p>'; 
+            }
+        });
+        btnCerrarFavoritos.addEventListener('click', () => { modalFavoritos.style.display = 'none'; });
+
+        // ==========================================
+        // 9. MOTOR DE LA RULETA (CON MODAL Y BASE DE DATOS)
+        // ==========================================
+        const canvas = document.getElementById("ruletaCanvas");
+        const ctx = canvas.getContext("2d");
+        const btnGirar = document.getElementById("btn-girar");
+        const premios = ["10% OFF", "Envío Gratis", "50% OFF", "Sorpresa", "2x1", "75% OFF"];
+        const colores = ["#3498db", "#e74c3c", "#f1c40f", "#9b59b6", "#2ecc71", "#e67e22"];
+        let rotacionActual = 0;
+        let productosOfertaGlogal = []; 
+
+        function dibujarRuleta() {
+            const radio = canvas.width / 2;
+            const arco = (2 * Math.PI) / premios.length;
+            for (let i = 0; i < premios.length; i++) {
+                const anguloInicio = i * arco;
+                const anguloFin = anguloInicio + arco;
+                ctx.beginPath();
+                ctx.fillStyle = colores[i];
+                ctx.moveTo(radio, radio);
+                ctx.arc(radio, radio, radio, anguloInicio, anguloFin);
+                ctx.fill(); ctx.stroke();
+                ctx.save();
+                ctx.translate(radio, radio);
+                ctx.rotate(anguloInicio + arco / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 20px Arial";
+                ctx.fillText(premios[i], radio - 20, 10);
+                ctx.restore();
+            }
+        }
+        
+
+        btnGirar.addEventListener("click", async () => {
+            btnGirar.disabled = true; 
+            try {
+                const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/inicio');
+                const db = await res.json();
+                let ofertas = db.filter(p => p.precio.toLowerCase().includes('desc') || p.precio.toLowerCase().includes('oferta') || p.precio.toLowerCase().includes('tarjeta'));
+                if (ofertas.length < 6) {
+                    const extraDb = db.sort(() => 0.5 - Math.random());
+                    ofertas = [...new Set([...ofertas, ...extraDb])]; 
+                }
+                productosOfertaGlogal = ofertas.sort(() => 0.5 - Math.random());
+            } catch (e) {
+                alert("Error conectando con la farmacia.");
+                btnGirar.disabled = false;
+                return;
+            }
+
+            btnGirar.style.transform = "translateY(6px)";
+            btnGirar.style.boxShadow = "0 0 0 #27ae60";
+            setTimeout(() => {
+                btnGirar.style.transform = "translateY(0)";
+                btnGirar.style.boxShadow = "0 6px 0 #27ae60, 0 10px 10px rgba(0,0,0,0.2)";
+            }, 100);
+
+            const premioGanadorIndex = Math.floor(Math.random() * premios.length);
+            const gradosPorPorcion = 360 / premios.length;
+            const rotacionParaGanar = 270 - (premioGanadorIndex * gradosPorPorcion) - (gradosPorPorcion / 2);
+            rotacionActual += (360 * 5) + rotacionParaGanar;
+            canvas.style.transform = `rotate(${rotacionActual}deg)`;
+
+            setTimeout(() => {
+                const premioTexto = premios[premioGanadorIndex];
+                const ganador = productosOfertaGlogal[0]; 
+
+                document.getElementById('texto-premio-ganado').innerText = `¡${premioTexto}!`;
+                const visualGanador = (ganador.imagen && ganador.imagen.startsWith('http')) 
+                    ? `<img src="${ganador.imagen}" alt="Foto" style="width: 100px; height: 100px; object-fit: contain;">` 
+                    : `<span style="font-size: 50px;">💊</span>`;
+
+                document.getElementById('producto-ganador-ruleta').innerHTML = `
+                    <div style="border: 1px solid #eee; padding: 15px; border-radius: 10px; background: #fafafa;">
+                        ${visualGanador}
+                        <p style="font-weight: bold; font-size: 14px; margin: 10px 0; height: 40px; overflow: hidden;">${ganador.nombre}</p>
+                        <p style="color: #2ecc71; font-size: 22px; font-weight: bold; margin: 0;">${ganador.precio}</p>
+                        <p style="font-size: 10px; color: #e74c3c; margin: 2px 0;">*Precio de presentación por defecto en catálogo</p>
+                        <p style="font-size: 12px; color: #888; margin-top: 5px;">📍 ${ganador.farmacia}</p>
+                        <button onclick="window.open('${ganador.enlace}', '_blank')" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%;">Reclamar Oferta 🛒</button>
+                    </div>
+                `;  
+                document.getElementById('modal-premio').style.display = 'block';
+                btnGirar.disabled = false;
+            }, 4100);
+        });
+
+        document.getElementById('cerrar-modal-premio').addEventListener('click', () => {
+            document.getElementById('modal-premio').style.display = 'none';
+            document.getElementById('contenedor-canvas-ruleta').style.display = 'none';
+            document.getElementById('btn-girar').style.display = 'none';
+            document.getElementById('titulo-ruleta').style.display = 'none';
+            document.getElementById('subtitulo-ruleta').style.display = 'none';
+            document.getElementById('seccion-otros-descuentos').style.display = 'block';
+            
+            const otros5 = productosOfertaGlogal.slice(1, 6);
+            let htmlOtros = "";
+            otros5.forEach(prod => {
+                const visual = (prod.imagen && prod.imagen.startsWith('http'))
+                    ? `<img src="${prod.imagen}" alt="Foto" style="width: 70px; height: 70px; object-fit: contain;">`
+                    : `<span style="font-size: 40px;">💊</span>`;
+                htmlOtros += `
+                    <div style="background: white; border: 1px solid #ddd; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                        ${visual}
+                        <p style="margin: 10px 0 5px 0; font-size: 12px; font-weight: bold; height: 35px; overflow: hidden;">${prod.nombre}</p>
+                        <div style="color: #2ecc71; font-weight: bold; font-size: 16px; margin-bottom: 5px;">${prod.precio}</div>
+                        <span style="font-size: 10px; color: #fff; background-color: #34495e; padding: 3px 8px; border-radius: 10px;">📍 ${prod.farmacia}</span>
+                        <button onclick="window.open('${prod.enlace}', '_blank')" style="margin-top: 10px; background: #3498db; color: white; border: none; padding: 6px; border-radius: 5px; cursor: pointer; font-size: 11px; width: 100%;">Ver Producto</button>
+                    </div>
+                `;
+            });
+            document.getElementById('grid-otros-descuentos').innerHTML = htmlOtros;
+        });
+
+    </script>
+    <!-- ========================================== -->
+    <!-- FOOTER PREMIUM TIPO COMPY -->
+    <!-- ========================================== -->
+    <footer class="footer-premium">
+        <div class="footer-contenido">
+            
+            <!-- Columna 1: Marca y Redes -->
+            <div class="footer-columna marca-col">
+                <div class="logo-footer">
+                    <span style="font-size: 28px;">✚</span>
+                    <span style="font-weight: 900; font-size: 24px; color: #0f172a; letter-spacing: -1px;">FARMACIAXS</span>
+                </div>
+                <p class="footer-texto">
+                    ¿Pensando en hacer compras? Ahorra dinero y tiempo al comparar los precios de las mejores cadenas de farmacias del Perú en un solo lugar.
+                </p>
+                <div class="redes-sociales">
+                    <!-- Iconos simulados con texto/emojis para no depender de librerías externas por ahora -->
+                    <a href="#" class="icono-red">F</a>
+                    <a href="#" class="icono-red">Ig</a>
+                    <a href="#" class="icono-red">Tt </a>
+                    <a href="#" class="icono-red">Tg    </a>
+                </div>
+            </div>
+
+            <!-- Columna 2: Categorías Rápidas -->
+            <div class="footer-columna enlaces-col">
+                <h4 class="footer-titulo">Categorías</h4>
+                <a href="#" class="footer-link">Cuidado del Bebé</a>
+                <a href="#" class="footer-link">Dermocosmética</a>
+                <a href="#" class="footer-link">Vitaminas y Suplementos</a>
+                <a href="#" class="footer-link">Dispositivos Médicos</a>
+                <a href="#" class="footer-link">Salud y Medicamentos</a>
+            </div>
+
+            <!-- Columna 3: Información y CTA (Call to Action) -->
+            <div class="footer-columna enlaces-col">
+                <h4 class="footer-titulo">Más de Farmaciaxs</h4>
+                <a href="#" class="footer-link">Términos y Condiciones</a>
+                <a href="#" class="footer-link">Política de Privacidad</a>
+                <a href="#" class="footer-link">Preguntas Frecuentes</a>
+                
+                <button class="btn-afilia">
+                    🏪 Afilia tu farmacia local
+                </button>
+            </div>
+
+        </div>
+        
+        <!-- Línea de Copyright -->
+        <div class="footer-bottom">
+            <p>© 2026 Farmaciaxs. Todos los derechos reservados. Desarrollado en Piura, Perú.</p>
+        </div>
+    </footer>
+</body>
+</html>
