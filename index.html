@@ -338,6 +338,22 @@
             font-size: 13px;
             background-color: #ffffff;
         }
+        /* Esto va al final de tu CSS */
+@media (max-width: 768px) {
+    /* Aquí cambias cómo se ven las cosas en celular */
+    
+    .contenedor-productos {
+        /* Si usabas flexbox o grid, aquí lo pones en 1 sola columna */
+        display: grid;
+        grid-template-columns: 1fr; 
+    }
+
+    .banner-principal {
+        /* Achicar el texto o los márgenes para que quepa */
+        font-size: 14px;
+        flex-direction: column;
+    }
+}
     </style>
 </head>
 <body>
