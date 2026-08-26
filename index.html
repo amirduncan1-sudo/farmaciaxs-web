@@ -339,19 +339,51 @@
             background-color: #ffffff;
         }
         /* Esto va al final de tu CSS */
+/* ========================================== */
+/* MODO CELULAR (DISEÑO RESPONSIVO PERFECTO) */
+/* ========================================== */
 @media (max-width: 768px) {
-    /* Aquí cambias cómo se ven las cosas en celular */
-    
-    .contenedor-productos {
-        /* Si usabas flexbox o grid, aquí lo pones en 1 sola columna */
-        display: grid;
-        grid-template-columns: 1fr; 
+    /* 1. Apilar el encabezado (Header) */
+    header {
+        flex-direction: column; /* Pone los elementos uno debajo del otro */
+        gap: 15px;
+        padding: 15px;
+    }
+    .buscador {
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .contenedor-botones {
+        flex-wrap: wrap; /* Permite que los botones pasen a otra línea si no caben */
+        justify-content: center;
     }
 
-    .banner-principal {
-        /* Achicar el texto o los márgenes para que quepa */
-        font-size: 14px;
+    /* 2. Ajustar la cuadrícula de productos (Catálogo) */
+    .productos-fijos {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Tarjetas más delgadas para que quepan 2 en el celular */
+        gap: 10px;
+    }
+    .producto-fijo {
+        height: auto;
+        padding: 10px;
+    }
+    
+    /* 3. Ajustar el Footer */
+    .footer-contenido {
+        grid-template-columns: 1fr; /* El footer se vuelve de una sola columna vertical */
+        text-align: center; /* Todo centrado */
+        padding: 20px;
+    }
+    .marca-col .logo-footer, .redes-sociales {
+        justify-content: center; /* Centramos el logo y las redes sociales */
+    }
+    
+    /* 4. Esconder el mensaje de Envíos si no cabe en el menú */
+    nav {
+        padding: 10px;
         flex-direction: column;
+        gap: 10px;
     }
 }
     </style>
