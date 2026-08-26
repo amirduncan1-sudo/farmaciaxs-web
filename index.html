@@ -746,20 +746,35 @@
                 
                 const visualProducto = (producto.imagen && producto.imagen.startsWith('http')) ? `<img src="${producto.imagen}" alt="Foto" style="width: 80px; height: 80px; object-fit: contain;">` : `<span style="font-size: 45px;">💊</span>`;
 
-                tarjeta.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px; align-items: center;">
-                        <span class="corazon-favorito" style="font-size: 22px; cursor: pointer; color: #ccc;" ${accionCorazon}>🤍</span>
-                        ${visualProducto}
-                        <span onclick="event.stopPropagation(); event.preventDefault(); agregarAReceta('${producto.nombre.replace(/'/g, "\\'")}', '${producto.precio}', '${producto.farmacia}');" 
-                            style="font-size: 22px; cursor: pointer; color: #3498db; font-weight: bold; padding: 0 5px;">[+]</span>
-                    </div>
-                    <p style="margin: 5px 0; font-size: 14px; font-weight: bold; height: 40px; overflow: hidden;">${producto.nombre}</p>
-                    <span style="font-size: 11px; color: #666; background-color: #eee; padding: 3px 8px; border-radius: 10px;">🏷️ ${producto.marca}</span>
-                    <div class="precio-producto">${producto.precio}</div>
-                    <span class="farmacia-tag">📍 ${producto.farmacia}</span>
-                `;
-                contenedorProductos.appendChild(tarjeta);
-            });
+                // ... (código anterior: let accionCorazon = ... y const visualProducto = ...)
+
+            // 1. Detectamos si el producto NO tiene stock
+            const sinStock = producto.stock === false; 
+
+            // 2. Si no hay stock, quitamos el [+] y ponemos una etiqueta roja
+            const botonAgregar = sinStock 
+                ? `<span style="font-size: 10px; color: white; background: #e74c3c; font-weight: bold; padding: 4px 6px; border-radius: 4px; cursor: not-allowed;">AGOTADO</span>`
+                : `<span onclick="event.stopPropagation(); event.preventDefault(); agregarAReceta('${producto.nombre.replace(/'/g, "\\'")}', '${producto.precio}', '${producto.farmacia}');" style="font-size: 22px; cursor: pointer; color: #3498db; font-weight: bold; padding: 0 5px;">[+]</span>`;
+
+            // 3. Efecto visual: Si está agotado, la tarjeta se vuelve medio transparente y grisácea
+            const estiloTarjeta = sinStock ? 'opacity: 0.6; filter: grayscale(40%);' : '';
+            tarjeta.style.cssText += estiloTarjeta; // Sumamos este estilo a la tarjeta
+
+            // 4. Inyectamos el HTML con las nuevas variables
+            tarjeta.innerHTML = `
+                <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 5px; align-items: center;">
+                    <span class="corazon-favorito" style="font-size: 22px; cursor: pointer; color: #ccc;" ${accionCorazon}>🤍</span>
+                    ${visualProducto}
+                    ${botonAgregar}
+                </div>
+                <p style="margin: 5px 0; font-size: 14px; font-weight: bold; height: 40px; overflow: hidden;">${producto.nombre}</p>
+                <span style="font-size: 11px; color: #666; background-color: #eee; padding: 3px 8px; border-radius: 10px;">🏷️ ${producto.marca}</span>
+                <div class="precio-producto" style="${sinStock ? 'color: #999;' : ''}">${producto.precio}</div>
+                <span class="farmacia-tag">📍 ${producto.farmacia}</span>
+            `;
+            
+            contenedorProductos.appendChild(tarjeta);
+        });
 
             // 4. DIBUJAR LOS BOTONES DE PAGINACIÓN (Al final del catálogo)
             if (totalPaginas > 1) {
