@@ -1269,40 +1269,105 @@
         });
         btnCerrarModal.addEventListener('click', () => { modalLogin.style.display = 'none'; });
 
+        // ==========================================
+        // LOGIN CON VERIFICACIÓN OTP DE 2 PASOS
+        // ==========================================
+        const fase1 = document.getElementById('fase-1-login');
+        const fase2 = document.getElementById('fase-2-login');
+        const codigoInput = document.getElementById('codigo-input');
+        const btnVerificar = document.getElementById('btn-verificar');
+
+        // Paso 1: Pedir el código al servidor
         btnIngresar.addEventListener('click', async () => {
-        const email = document.getElementById('email-input').value.trim();
-        const pass = document.getElementById('pass-input').value.trim();
-    
-        const formatoCorreoValido = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const email = document.getElementById('email-input').value.trim();
+            const pass = document.getElementById('pass-input').value.trim();
+            const formatoCorreoValido = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
             if(email && pass) {
-        if (!formatoCorreoValido.test(email)) {
-            alert("❌ Por favor, ingresa un correo real (ejemplo: tunombre@gmail.com)");
-            return; 
-        }
+                if (!formatoCorreoValido.test(email)) {
+                    alert("❌ Ingresa un correo real (ejemplo: tunombre@gmail.com).");
+                    return;
+                }
 
-        btnIngresar.innerText = "Conectando...";
-        try {
-            // ... (AQUÍ VA TU CÓDIGO FETCH ORIGINAL QUE YA TIENES) ...
-            const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password: pass })
-            });
-            // ... (el resto de tu código de éxito) ...
+                btnIngresar.innerText = "Enviando código...";
+                btnIngresar.disabled = true;
+
+                try {
+                    // LLAMAMOS A LA RUTA NUEVA CORRECTA
+                    const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/solicitar-codigo', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    
                     const data = await res.json();
+                    
                     if (res.ok) {
-                        modalLogin.style.display = 'none';
-                        localStorage.setItem('usuarioFarmaciaxs', data.email);
-                        btnLogin.innerHTML = `👤 Hola, ${data.email.split('@')[0]}`;
-                        btnLogin.style.backgroundColor = '#f39c12';
-                        btnLogin.style.color = 'white';
-                        btnLogin.style.borderColor = '#f39c12';
-                        cargarInicio(); 
+                        // Cambiamos a la fase 2 visualmente (pedir código)
+                        fase1.style.display = 'none';
+                        fase2.style.display = 'block';
                     } else { alert(data.error); }
                 } catch (e) { alert("Error conectando con el servidor."); } 
-                finally { btnIngresar.innerText = "Entrar / Registrarme"; }
+                finally {
+                    btnIngresar.innerText = "Recibir código ✉️";
+                    btnIngresar.disabled = false;
+                }
             } else { alert("Ingresa correo y contraseña."); }
+        });
+
+        // Paso 2: Comprobar si el código que escribió el usuario es correcto
+        btnVerificar.addEventListener('click', async () => {
+            const email = document.getElementById('email-input').value.trim();
+            const pass = document.getElementById('pass-input').value.trim();
+            const codigo = codigoInput.value.trim();
+
+            if (codigo.length !== 4) {
+                alert("El código debe tener 4 dígitos exactos.");
+                return;
+            }
+
+            btnVerificar.innerText = "Comprobando...";
+            btnVerificar.disabled = true;
+
+            try {
+                // LLAMAMOS A LA RUTA DE VERIFICACIÓN
+                const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/verificar-codigo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password: pass, codigo })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    // ¡Inicio de sesión 100% verificado y seguro!
+                    modalLogin.style.display = 'none';
+                    localStorage.setItem('usuarioFarmaciaxs', email);
+                    btnLogin.innerHTML = `👤 Hola, ${email.split('@')[0]}`;
+                    btnLogin.style.backgroundColor = '#f39c12';
+                    btnLogin.style.color = 'white';
+                    btnLogin.style.borderColor = '#f39c12';
+                    
+                    // Reseteamos el modal a la fase 1 por si vuelve a iniciar sesión después
+                    fase1.style.display = 'block';
+                    fase2.style.display = 'none';
+                    codigoInput.value = '';
+                    
+                    cargarInicio(); 
+                } else { alert(data.error); }
+            } catch (e) { alert("Error validando el código."); } 
+            finally {
+                btnVerificar.innerText = "Validar Código ✅";
+                btnVerificar.disabled = false;
+            }
+        });
+
+        // Aseguramos que si le da a cancelar, se reinicie la ventana al Paso 1
+        btnCerrarModal.addEventListener('click', () => { 
+            modalLogin.style.display = 'none'; 
+            fase1.style.display = 'block';
+            fase2.style.display = 'none';
+            codigoInput.value = '';
         });
 
         btnFavoritos.addEventListener('click', async () => {
