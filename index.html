@@ -1254,16 +1254,26 @@
         btnCerrarModal.addEventListener('click', () => { modalLogin.style.display = 'none'; });
 
         btnIngresar.addEventListener('click', async () => {
-            const email = document.getElementById('email-input').value.trim();
-            const pass = document.getElementById('pass-input').value.trim();
+        const email = document.getElementById('email-input').value.trim();
+        const pass = document.getElementById('pass-input').value.trim();
+    
+        const formatoCorreoValido = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
             if(email && pass) {
-                btnIngresar.innerText = "Conectando...";
-                try {
-                    const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/login', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password: pass })
-                    });
+        if (!formatoCorreoValido.test(email)) {
+            alert("❌ Por favor, ingresa un correo real (ejemplo: tunombre@gmail.com)");
+            return; 
+        }
+
+        btnIngresar.innerText = "Conectando...";
+        try {
+            // ... (AQUÍ VA TU CÓDIGO FETCH ORIGINAL QUE YA TIENES) ...
+            const res = await fetch('https://farmaciaxs-api-backend.onrender.com/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password: pass })
+            });
+            // ... (el resto de tu código de éxito) ...
                     const data = await res.json();
                     if (res.ok) {
                         modalLogin.style.display = 'none';
