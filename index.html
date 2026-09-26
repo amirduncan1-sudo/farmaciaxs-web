@@ -1020,7 +1020,6 @@
                 e.preventDefault();
                 const text = e.target.innerText;
 
-                // Limpiamos los filtros laterales
                 document.querySelectorAll('.filtro-cb').forEach(cb => cb.checked = false);
 
                 if (text === 'Suerte') {
@@ -1033,10 +1032,8 @@
                 } else {
                     cambiarPantalla('catalogo-normal');
                     
-                    // La barra del usuario queda limpia y profesional
                     inputBusqueda.value = ''; 
                     
-                    // Usamos palabras que sí existen en tu BD de prueba por ahora
                     if (text === 'Los más comprados') { 
                         cargarInicio(); 
                     }
@@ -1049,13 +1046,18 @@
                     else if (text === 'Vitaminas') { 
                         buscarEnFarmacias('vitamina'); 
                     }
+                  
+                    else if (text === 'Cuidado Personal') { 
+                        buscarEnFarmacias('jabon'); 
+                    }
+                    else if (text === 'Dermocosmética') { 
+                        buscarEnFarmacias('crema'); 
+                    }
                 }
             });
         });
 
-        // ==========================================
-        // 7. CEREBRO: SIMULADOR DE AHORRO (MI RECETA)
-        // ==========================================
+
         let miReceta = []; 
         const btnReceta = document.getElementById('btn-receta');
         const modalReceta = document.getElementById('modal-receta');
