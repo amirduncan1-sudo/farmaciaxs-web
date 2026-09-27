@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farmaciaxs</title>
     <style>
-        /* 1. EL NUEVO COLOR PASTEL PIEL */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #fdf3eb; 
@@ -14,7 +13,6 @@
             color: #334155;
         }
 
-        /* 2. HEADER MÁS ESPACIADO */
         header {
             display: flex;
             justify-content: space-between;
@@ -27,28 +25,27 @@
         .logo { 
             font-size: 26px; 
             font-weight: 900; 
-            color: #002878; /* Azul Zafiro Intenso y corporativo */
+            color: #002878; 
             letter-spacing: 1.5px;
             text-transform: uppercase;
             text-shadow: 1px 1px 2px rgba(0, 40, 120, 0.1);
         }
 
-        /* 3. BUSCADOR MINIMALISTA TIPO COMPY */
         .buscador { 
-            background: #f8fafc; /* Fondo gris súper sutil */
-            border: 1px solid #e2e8f0; /* Borde delicado, no azul fuerte */
+            background: #f8fafc; 
+            border: 1px solid #e2e8f0; 
             border-radius: 8px;
             padding: 10px 20px;
             flex-grow: 1;
             margin: 0 40px; 
             display: flex;
-            box-shadow: none; /* Adiós sombras pesadas */
+            box-shadow: none; 
             transition: all 0.2s ease;
         }
         .buscador:focus-within {
             background: #ffffff;
             border-color: #cbd5e1;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03); /* Sombra suave solo al escribir */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
         }
         .buscador input { 
             background: transparent; 
@@ -59,37 +56,34 @@
             color: #334155; 
         }
 
-        /* 4. LOS BOTONES SUPERIORES (Elegantes y limpios) */
         .contenedor-botones {
             display: flex; 
-            gap: 5px; /* Más juntos para un look compacto */
+            gap: 5px; 
             align-items: center;
         }
 
         .btn-top {
             padding: 10px 16px;
             border-radius: 8px;
-            background: transparent; /* Sin fondo por defecto */
-            border: 1px solid transparent; /* SIN bordes de colores */
+            background: transparent; /
+            border: 1px solid transparent; 
             cursor: pointer;
             font-size: 14px;
-            font-weight: 600; /* Letra un poco más fina, menos tosca */
-            color: #475569; /* Texto gris oscuro elegante */
+            font-weight: 600; 
+            color: #475569; 
             transition: all 0.2s ease;
             white-space: nowrap;
         }
 
-        /* Efecto hover sutil: Solo un fondo gris claro al pasar el mouse */
         .btn-direccion:hover, .btn-receta:hover, .btn-favoritos:hover { 
             background: #f1f5f9; 
             color: #0f172a;
         }
 
-        /* Botón de Iniciar Sesión (El llamado a la acción principal) */
         .btn-login { 
-            background: #0f172a; /* Azul noche casi negro, transmite mucha seguridad */
+            background: #0f172a; 
             color: white; 
-            margin-left: 10px; /* Lo separamos un poquito del resto */
+            margin-left: 10px; 
         }
         .btn-login:hover { 
             background: #334155; 
@@ -98,7 +92,6 @@
         }
 
 
-        /* MENÚ DE NAVEGACIÓN (Contenedor Principal) */
         nav {
             background-color: #f0f8ff; 
             padding: 10px 30px 15px 30px;
@@ -110,7 +103,6 @@
             overflow: hidden; /* Evita que la página se ensanche */
         }
 
-        /* 🚀 EL CARRUSEL INFINITO TIPO COMPY */
         .marquee-container {
             flex-grow: 1;
             overflow: hidden;
@@ -129,7 +121,6 @@
             animation: scrollInfinito 25s linear infinite; 
         }
 
-        /* TRUCO UX: Pausar el movimiento al pasar el mouse */
         .marquee-content:hover {
             animation-play-state: paused;
         }
